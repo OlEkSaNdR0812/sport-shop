@@ -2,8 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SportingGoodsModule } from './sporting_goods/sporting_goods.module';
 import { StoreModule } from './store/store.module';
-import { SportingGoods } from './entity/sporting_goods'
+import { SportingGoods } from './entity/sporting_goods';
 import { Order } from './entity/order';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
@@ -20,5 +23,7 @@ import { Order } from './entity/order';
     SportingGoodsModule,
     StoreModule,
   ],
+  controllers: [AppController],
+  providers: [AppService, GoogleStrategy],
 })
-export class AppModule {}
+export class AppModule { }
