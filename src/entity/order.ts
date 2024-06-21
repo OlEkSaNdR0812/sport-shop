@@ -14,6 +14,6 @@ export class Order {
   @Column()
   status: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column()
   orderDate: Date;
 }

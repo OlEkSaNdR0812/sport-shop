@@ -1,14 +1,42 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './entity/user';
 
 @Injectable()
 export class AppService {
-  googleLogin(req) {
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
+
+  async googleLogin(req) {
     if (!req.user) {
-      return 'No user from google'
+      return 'No user from google';
     }
+
+    const { email, firstName, lastName, picture, accessToken } = req.user;
+
+    let user = await this.userRepository.findOne({ where: { email } });
+
+    if (!user) {
+      user = this.userRepository.create({
+        email,
+        firstName,
+        lastName,
+        picture,
+        accessToken,
+      });
+
+      await this.userRepository.save(user);
+    } else {
+      user.accessToken = accessToken;
+      await this.userRepository.save(user);
+    }
+
     return {
       message: 'User Info from Google',
-      user: req.user
-    }
+      user,
+    };
   }
 }

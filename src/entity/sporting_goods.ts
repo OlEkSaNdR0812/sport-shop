@@ -9,11 +9,14 @@ export class SportingGoods {
   name: string;
 
   @Column()
-  category: string;
-
-  @Column()
   price: number;
 
   @Column()
   description: string;
+
+  @Column()
+  category: string;
+
+  @Column()
+  inStock: boolean;
 }
