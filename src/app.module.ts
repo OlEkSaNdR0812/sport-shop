@@ -4,6 +4,7 @@ import { SportingGoodsModule } from './sporting_goods/sporting_goods.module';
 import { StoreModule } from './store/store.module';
 import { SportingGoods } from './entity/sporting_goods';
 import { Order } from './entity/order';
+import { User } from './entity/user';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GoogleStrategy } from './google.strategy';
@@ -11,15 +12,16 @@ import { GoogleStrategy } from './google.strategy';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'password',
+      port: 5432,
+      username: 'postgres',
+      password: 'hv08msa9',
       database: 'sports_shop',
-      entities: [SportingGoods, Order],
+      entities: [SportingGoods, Order, User],
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([User]),
     SportingGoodsModule,
     StoreModule,
   ],
