@@ -8,6 +8,7 @@ import { User } from './entity/user';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GoogleStrategy } from './google.strategy';
+import { RolesGuard } from './auth/roles/guard';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { GoogleStrategy } from './google.strategy';
       username: 'postgres',
       password: 'hv08msa9',
       database: 'sports_shop',
-      entities: [SportingGoods, Order, User],
+      entities: [User, SportingGoods, Order],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([User]),
@@ -26,6 +27,6 @@ import { GoogleStrategy } from './google.strategy';
     StoreModule,
   ],
   controllers: [AppController],
-  providers: [AppService, GoogleStrategy],
+  providers: [AppService, GoogleStrategy, RolesGuard],
 })
-export class AppModule { }
+export class AppModule {}

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entity/user';
+import { ADMIN_EMAILS } from './config/config';
 
 @Injectable()
 export class AppService {
@@ -26,6 +27,7 @@ export class AppService {
         lastName,
         picture,
         accessToken,
+        role: ADMIN_EMAILS.includes(email) ? 'admin' : 'user',
       });
 
       await this.userRepository.save(user);
