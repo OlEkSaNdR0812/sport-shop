@@ -19,4 +19,7 @@ export class SportingGoods {
 
   @Column()
   inStock: boolean;
+  
+  @Column({ nullable: true })
+  imageUrl: string;
 }

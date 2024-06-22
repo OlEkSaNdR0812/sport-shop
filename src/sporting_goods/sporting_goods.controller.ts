@@ -1,13 +1,23 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { SportingGoodsService } from './sporting_goods.service';
 import { SportingGoods } from '../entity/sporting_goods'
 import { RolesGuard } from 'src/auth/roles/guard';
 import { Roles } from 'src/auth/roles/decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('sportinggoods')
 export class SportingGoodsController {
   constructor(private readonly sportingGoodsService: SportingGoodsService) {}
 
+  @Post('/:id/uploadImage')
+  @UseGuards(RolesGuard)
+  @Roles('admin')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(@Param('id') id: number, @UploadedFile() file: Express.Multer.File) {
+    const imagePath = `uploads/${file.filename}`;
+    return this.sportingGoodsService.updateImage(id, imagePath);
+  }
+  
   @Get()
   findAll(): Promise<SportingGoods[]> {
     return this.sportingGoodsService.findAll();

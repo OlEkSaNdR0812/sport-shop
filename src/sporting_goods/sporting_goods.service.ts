@@ -29,4 +29,13 @@ export class SportingGoodsService {
   async update(id: number, sportingGood: SportingGoods): Promise<void> {
     await this.sportingGoodsRepository.update(id, sportingGood);
   }
+
+  async updateImage(id: number, imagePath: string): Promise<SportingGoods> {
+    const item = await this.sportingGoodsRepository.findOneBy({ id });
+    if (!item) {
+      throw new Error('Item not found');
+    }
+    item.imageUrl = imagePath;
+    return this.sportingGoodsRepository.save(item);
+  }
 }
