@@ -15,8 +15,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     private readonly userRepository: Repository<User>,
   ) {
     super({
-      clientID: '',
-      clientSecret: '',
+      clientID: '325560937422-t29l2be7vb2h20cjihg5cdu9e67nvl0p.apps.googleusercontent.com',
+      clientSecret: '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',
       callbackURL: 'http://localhost:3001/auth/google/callback',
       scope: ['email', 'profile'],
     });
