@@ -11,7 +11,9 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     const request = context.switchToHttp().getRequest();
-    const user = request.user;
+    const user = request.session?.user; // Retrieve user from session
+
+    console.log('User in RolesGuard:', user); // Debugging statement
 
     if (!user) {
       throw new UnauthorizedException('User not authenticated');
