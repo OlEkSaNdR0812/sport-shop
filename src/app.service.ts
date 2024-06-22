@@ -11,9 +11,9 @@ export class AppService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async googleLogin(req) {
+  async googleLogin(req): Promise<{ message: string, user: User }> {
     if (!req.user) {
-      return 'No user from google';
+      throw new Error('No user from google');
     }
 
     const { email, firstName, lastName, picture, accessToken } = req.user;
