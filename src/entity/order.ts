@@ -6,7 +6,7 @@ export class Order {
   id: number;
 
   @Column()
-  petId: number;
+  sporting_goodsId: number;
 
   @Column()
   quantity: number;
