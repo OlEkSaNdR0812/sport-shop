@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sporting Goods List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    .sporting-good {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+    }
+    .sporting-good img {
+      max-width: 100px;
+      height: auto;
+      margin-right: 20px;
+      border-radius: 4px;
+    }
+    .sporting-good-details {
+      flex-grow: 1;
+    }
+    .sporting-good-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+    }
+    .sporting-good-description {
+      color: #666;
+      margin-top: 5px;
+    }
+    .sporting-good-price {
+      font-size: 1.1rem;
+      color: #28a745;
+    }
+    .sporting-good-category {
+      margin-top: 5px;
+      color: #666;
+    }
+    .sporting-good-in-stock {
+      color: #218838;
+      font-weight: bold;
+    }
+    .product-image {
+  max-width: 100px;
+  height: auto;
+  margin-right: 20px;
+  border-radius: 4px;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sporting Goods List</h1>
+    <div id="sportingGoodsList"></div>
+  </div>
+
+  <script>
+     async function fetchSportingGoods() {
+    try {
+      const response = await fetch('http://localhost:3001/sportinggoods');
+      const sportingGoods = await response.json();
+      
+      const sportingGoodsListElement = document.getElementById('sportingGoodsList');
+      
+      sportingGoods.forEach(item => {
+        const sportingGoodDiv = document.createElement('div');
+        sportingGoodDiv.classList.add('sporting-good');
+        
+        if (item.imageUrl) {
+          const img = document.createElement('img');
+          img.src = `http://localhost:3001/${item.imageUrl}`; // Adjust this URL based on your actual setup
+          img.alt = item.name;
+          img.classList.add('product-image'); // Optional: Add a CSS class for styling
+          sportingGoodDiv.appendChild(img);
+        }
+        
+        const detailsDiv = document.createElement('div');
+        detailsDiv.classList.add('sporting-good-details');
+        
+        const nameElement = document.createElement('div');
+        nameElement.classList.add('sporting-good-name');
+        nameElement.textContent = item.name;
+        
+        const descriptionElement = document.createElement('div');
+        descriptionElement.classList.add('sporting-good-description');
+        descriptionElement.textContent = item.description;
+        
+        const priceElement = document.createElement('div');
+        priceElement.classList.add('sporting-good-price');
+        priceElement.textContent = `$${item.price.toFixed(2)}`;
+        
+        const categoryElement = document.createElement('div');
+        categoryElement.classList.add('sporting-good-category');
+        categoryElement.textContent = `Category: ${item.category}`;
+        
+        const inStockElement = document.createElement('div');
+        inStockElement.classList.add('sporting-good-in-stock');
+        inStockElement.textContent = item.inStock ? 'In Stock' : 'Out of Stock';
+        
+        detailsDiv.appendChild(nameElement);
+        detailsDiv.appendChild(descriptionElement);
+        detailsDiv.appendChild(priceElement);
+        detailsDiv.appendChild(categoryElement);
+        detailsDiv.appendChild(inStockElement);
+        
+        sportingGoodDiv.appendChild(detailsDiv);
+        sportingGoodsListElement.appendChild(sportingGoodDiv);
+      });
+    } catch (error) {
+      console.error('Failed to fetch sporting goods:', error);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    fetchSportingGoods();
+  });
+  </script>
+</body>
+</html>
