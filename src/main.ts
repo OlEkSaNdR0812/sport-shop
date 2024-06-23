@@ -7,7 +7,7 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  
+
   app.use(cors({
     origin: 'http://127.0.0.1:5500', // Дозволити запити з цього домену
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -16,15 +16,18 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: 'your-secret-key', 
+      secret: 'your-secret-key',
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: false }, 
+      cookie: { secure: false },
     }),
   );
- 
 
-  app.useStaticAssets(join(__dirname, '..', 'uploads')); 
+  // Serve static files
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/', // Додайте префікс до URL
+  });
+
   await app.listen(3001);
 }
 bootstrap();

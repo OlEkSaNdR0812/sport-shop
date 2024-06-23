@@ -5,6 +5,7 @@ import { RolesGuard } from 'src/auth/roles/guard';
 import { Roles } from 'src/auth/roles/decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { storage } from 'src/config/multer';
+import { join } from 'path';
 
 @Controller('sportinggoods')
 export class SportingGoodsController {
@@ -44,8 +45,8 @@ export class SportingGoodsController {
   }
 
   @Delete(':id')
-  @UseGuards(RolesGuard)
-  @Roles('admin')
+  /*@UseGuards(RolesGuard)
+  @Roles('admin')*/
   remove(@Param('id') id: string): Promise<void> {
     return this.sportingGoodsService.remove(+id);
   }
