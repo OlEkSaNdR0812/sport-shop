@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .order-container {
+      width: 80%;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .order-item div {
+      flex: 1;
+    }
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .quantity-controls button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+    .quantity-controls div {
+      text-align: center;
+      min-width: 20px;
+    }
+    .order-total {
+      font-size: 1.2em;
+      margin-top: 20px;
+      text-align: right;
+    }
+    .order-submit {
+      background-color: #28a745;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .toast {
+      visibility: hidden;
+      max-width: 50px;
+      height: 50px;
+      margin: auto;
+      background-color: #28a745;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 17px;
+      white-space: nowrap;
+    }
+    .toast #desc {
+      color: #fff;
+      padding: 16px;
+      font-size: 17px;
+    }
+    .show {
+      visibility: visible !important;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ваше замовлення</h1>
+  <div class="order-container" id="orderContainer">
+    <!-- Order items will be appended here by JavaScript -->
+  </div>
+  <div id="toast" class="toast"><div id="desc">Ваше замовлення підтверджено!</div></div>
+  <script>
+    let cart = [];
+
+    window.onload = () => {
+      cart = JSON.parse(localStorage.getItem('cart')) || [];
+      displayOrder();
+    };
+
+    function displayOrder() {
+      const orderContainer = document.getElementById('orderContainer');
+      orderContainer.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        const orderItem = document.createElement('div');
+        orderItem.className = 'order-item';
+
+        const itemName = document.createElement('div');
+        itemName.textContent = item.name;
+        orderItem.appendChild(itemName);
+
+        const quantityControls = document.createElement('div');
+        quantityControls.className = 'quantity-controls';
+
+        const decreaseButton = document.createElement('button');
+        decreaseButton.textContent = '-';
+        decreaseButton.onclick = () => updateQuantity(item.id, -1);
+        quantityControls.appendChild(decreaseButton);
+
+        const itemQuantity = document.createElement('div');
+        itemQuantity.textContent = item.quantity;
+        quantityControls.appendChild(itemQuantity);
+
+        const increaseButton = document.createElement('button');
+        increaseButton.textContent = '+';
+        increaseButton.onclick = () => updateQuantity(item.id, 1);
+        quantityControls.appendChild(increaseButton);
+
+        orderItem.appendChild(quantityControls);
+
+        const itemPrice = document.createElement('div');
+        itemPrice.textContent = `₴${item.price * item.quantity}.00`;
+        orderItem.appendChild(itemPrice);
+
+        orderContainer.appendChild(orderItem);
+
+        total += item.price * item.quantity;
+      });
+      const orderTotal = document.createElement('div');
+      orderTotal.className = 'order-total';
+      orderTotal.textContent = `Всього: ₴${total}.00`;
+      orderContainer.appendChild(orderTotal);
+
+      const orderSubmitButton = document.createElement('button');
+      orderSubmitButton.className = 'order-submit';
+      orderSubmitButton.textContent = 'Підтвердити замовлення';
+      orderSubmitButton.onclick = submitOrder;
+      orderContainer.appendChild(orderSubmitButton);
+    }
+
+    function updateQuantity(id, change) {
+      const item = cart.find(item => item.id === id);
+      if (item) {
+        item.quantity += change;
+        if (item.quantity < 1) {
+          item.quantity = 1;
+        }
+        displayOrder();
+        localStorage.setItem('cart', JSON.stringify(cart));
+      }
+    }
+
+    async function submitOrder() {
+      const orderData = cart.map(item => ({
+        sporting_goodsId: item.id,
+        quantity: item.quantity,
+        status: 'pending',
+        orderDate: new Date()
+      }));
+
+      try {
+        const response = await fetch('http://localhost:3001/store/order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(orderData)
+        });
+
+        if (response.ok) {
+          showToast('Ваше замовлення підтверджено!');
+          localStorage.removeItem('cart');
+          setTimeout(() => {
+            window.location.href = 'product_list.html';
+          }, 2000);
+        } else {
+          showToast('Не вдалося підтвердити замовлення.');
+        }
+      } catch (error) {
+        console.error('Failed to submit order', error);
+        showToast('Не вдалося підтвердити замовлення.');
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      const desc = document.getElementById("desc");
+      desc.textContent = message;
+      toast.className = "show";
+      setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+  </script>
+</body>
+</html>
