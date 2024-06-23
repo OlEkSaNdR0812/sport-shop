@@ -18,9 +18,9 @@ export class AppController {
   async googleAuthRedirect(@Req() req, @Res() res: Response) {
     try {
       const user = await this.appService.googleLogin(req);
-      console.log('User after Google Login:', user); // Debugging statement
-      req.session.user = user.user; // Ensure session is available and set the user information
-      res.redirect('/');
+      console.log('User after Google Login:', user); 
+      req.session.user = user.user; 
+      res.redirect('http://127.0.0.1:5500/src/public/HomePage.html');
     } catch (error) {
       console.error(error);
       res.status(401).json({ message: 'Authentication failed' });

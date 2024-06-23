@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport Shop</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden; 
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-height: 85px;
+        }
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-logo img {
+            height: 100px;
+            margin-right: 10px;
+        }
+        .navbar-logo span {
+            font-size: 36px;
+            color: #8DC63F;
+        }
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar-menu li {
+            margin: 0 15px;
+        }
+        .navbar-menu a {
+            text-decoration: none;
+            color: #666;
+            font-size: 16px;
+        }
+        .navbar-menu a:hover {
+            color: #8DC63F;
+        }
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-login {
+            padding: 5px 15px;
+            background-color: #8DC63F;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            margin-right: 25px; 
+        }
+        .navbar-login:hover {
+            background-color: #76B033;
+        }
+        .navbar-cart {
+            position: relative;
+        }
+        .navbar-cart img {
+            height: 30px;
+            cursor: pointer;
+        }
+        .navbar-cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        .discount-section {
+            width: 100%;
+            background-color: #f8f8f8;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            background-color: #dbf8ba;
+        }
+        .discount-text {
+            position: absolute;
+            margin-left: -950px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #ff0000;
+        }
+        .discount-content {
+            text-align: center;
+        }
+        .discount-content img {
+            width: 450px;
+            height: auto;
+            margin-bottom: 30px;
+        }
+        .discount-content button {
+            padding: 10px 20px;
+            background-color: #8DC63F;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: -280px;
+        }
+        .discount-content button:hover {
+            background-color: #76B033;
+        }
+        .countdown-container {
+            position: absolute;
+            margin-right: -940px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center;
+        }
+        .countdown-text {
+            font-size: 18px;
+            color: #333;
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .countdown div {
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ccc;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+        .countdown div span {
+            font-size: 24px;
+            color: red;
+        }
+        .countdown div small {
+            display: block;
+            font-size: 14px;
+            color: #666;
+        }
+        .background-section {
+            width: 100%;
+            background: url('image/gantel.png') no-repeat center center;
+            background-size: cover;
+            padding: 300px 0;
+            overflow: hidden; 
+        }
+        .content {
+            width: 80%;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .content .block {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex: 1 1 30%;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <img src="image/LogoShop.png" alt="Shop logo">
+            <span>Sport Shop</span>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="HomePage.html">Home</a></li>                  
+            <li><a href="product_list.html">Shop</a></li>
+            
+        </ul>
+        <div class="navbar-actions">
+            <a href="http://localhost:3001/auth/google" class="navbar-login">Login</a>
+            <div class="navbar-cart">
+                <img src="image/cart.png" alt="Cart">
+                <div class="navbar-cart-count">0</div>
+            </div>
+        </div>
+    </nav>
+
+    
+    <div class="discount-section">
+        <div class="discount-text">
+            <h2>ЗНИЖКА!</h2>
+            <h2>Прямо зарає діє знижка в 15% на цей товар!</h2>              
+                         </div>
+        <div class="discount-content">
+            <img src="image/gantel.png" alt="Discounted Product">
+            <button onclick="location.href='product_list.html'">Перейти</button>
+        </div>
+        <div class="countdown-container">
+            <div class="countdown-text">Знижка закінчується через:</div>
+            <div class="countdown" id="countdown">
+                <div>
+                    <span id="days">14</span>
+                    <small>days</small>
+                </div>
+                <div>
+                    <span id="hours">00</span>
+                    <small>hours</small>
+                </div>
+                <div>
+                    <span id="minutes">00</span>
+                    <small>minutes</small>
+                </div>
+                <div>
+                    <span id="seconds">00</span>
+                    <small>seconds</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="background-section">
+        <div class="content">
+            <div class="block">
+                <h2>About Us</h2>
+                <p>We are the leading sport shop offering a wide range of products...</p>
+            </div>
+            <div class="block">
+                <h2>Our Mission</h2>
+                <p>Our mission is to provide the best quality sports equipment...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer section -->
+    <footer>
+        <div>
+            <a href="#about">About</a>
+            <a href="#team">Team</a>
+            <a href="#blog">Blog</a>
+            <a href="#contacts">Contacts</a>
+        </div>
+    </footer>
+
+    <script>
+        
+        var countDownDate = localStorage.getItem('countDownDate');
+
+        if (!countDownDate) {
+            
+            countDownDate = new Date().getTime() + 14 * 24 * 60 * 60 * 1000;
+            localStorage.setItem('countDownDate', countDownDate);
+        } else {
+            countDownDate = parseInt(countDownDate, 10);
+        }
+
+        
+        var countdownfunction = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+
+            if (distance < 0) {
+                clearInterval(countdownfunction);
+                document.getElementById("countdown").innerHTML = "EXPIRED";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
