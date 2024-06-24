@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: rgba(191, 242, 184, 0.323);
       margin: 0;
       padding: 0;
       display: flex;
@@ -192,6 +192,39 @@
     footer div a:hover {
       text-decoration: underline;
     }
+
+    .form-section {
+      margin-top: 20px;
+      margin-left: -1000px;
+    }
+
+    .form-section h2 {
+      margin-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input, .form-group select {
+      width: 250%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    .form-group input[type="radio"] {
+      width: auto;
+    }
+
+    .form-group div {
+      margin-bottom: 5px;
+    }
+
   </style>
 </head>
 <body>
@@ -216,128 +249,164 @@
 
   <h1>Ваше замовлення</h1>
   <div class="order-container" id="orderContainer">
-    <!-- Order items will be appended here by JavaScript -->
+      </div>
+  <div class="form-section">
+    <h2>Контактні дані</h2>
+    <div class="form-group">
+      <label for="phone">Телефон</label>
+      <input type="tel" id="phone" placeholder="+380 (__) ___-____">
+    </div>
+    <div class="form-group">
+      <label for="lastName">Прізвище</label>
+      <input type="text" id="lastName" placeholder="Введи Прізвище">
+    </div>
+    <div class="form-group">
+      <label for="firstName">Ім'я</label>
+      <input type="text" id="firstName" placeholder="Введи Ім'я">
+    </div>
+    <h2>Доставка</h2>
+    <div class="form-group">
+      <label>Обери спосіб доставки</label>
+      <div><input type="radio" name="delivery" value="Нова Пошта" checked> Нова Пошта</div>
+      <div><input type="radio" name="delivery" value="У поштомат"> У поштомат</div>
+      <div><input type="radio" name="delivery" value="Кур'єром"> Кур'єром</div>
+    </div>
+    <div class="form-group">
+      <label for="city">Населений пункт</label>
+      <select id="city">
+        <option value="Київ">Київ</option>
+        <option value="Одеса">Одеса</option>
+        <option value="Дніпро">Дніпро</option>
+        <option value="Харків">Харків</option>
+        <option value="Львів">Львів</option>
+        <option value="Миколаїв">Миколаїв</option>
+        <option value="Запоріжжя">Запоріжжя</option>
+        <option value="Херсон">Херсон</option>
+        <option value="Ужгоро">Ужгоро</option>
+        <option value="Полтава">Полтава</option>
+        <option value="Суми">Суми</option>
+        <option value="Донецьк">Донецьк</option>
+        <option value="Чернівці">Чернівці</option>
+        <option value="Чернігів">Чернігів</option>
+        <option value="Черкаси">Черкаси</option>
+        <option value="Луганськ">Луганськ</option>
+        <option value="Тернопіль">Тернопіль</option>
+        <option value="Луцьк">Луцьк</option>
+        <option value="Рівне">Рівне</option>
+        <option value="Івано-Франківськ">Івано-Франківськ</option>
+        <option value="Житомир">Житомир</option>
+        <option value="Вінниця">Вінниця</option>
+        <option value="Кіровоград">Кіровоград</option>
+        <option value="Харків">Харків</option>
+        <option value="Хмельницький">Хмельницький</option>
+      </select>
+    </div>
+    <h2>Оплата</h2>
+    <div class="form-group">
+      <label>Обери спосіб оплати</label>
+      <div><input type="radio" name="payment" value="Оплата карткою" checked> Оплата карткою</div>
+      <div class="form-group">
+        <input type="text" id="number card" placeholder="Введи номер банківської карти">
+      </div>
+      <div><input type="radio" name="payment" value="Оплата на рахунок IBAN"> Оплата на рахунок IBAN</div>
+      <div><type="text" name="IBAN" > UA633052990262066400949587906</div>
+    
+    </div>
   </div>
-  <div id="toast" class="toast"><div id="desc">Ваше замовлення підтверджено!</div></div>
-  
-  <!-- Footer section -->
+  <div class="order-total" id="orderTotal">Total: $0.00</div>
+  <button class="order-submit" id="orderSubmit">Submit Order</button>
+
+  <div id="toast" class="toast">
+    <div id="desc">Order placed successfully!</div>
+  </div>
+
   <footer>
-    <div>        
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
+    <div>
+      <a href="#">Terms of Service</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Contact Us</a>
     </div>
   </footer>
 
   <script>
-    let cart = [];
+    document.addEventListener('DOMContentLoaded', function() {
+      const orderItems = JSON.parse(localStorage.getItem('orderItems')) || [];
+      const orderContainer = document.getElementById('orderContainer');
+      const orderTotal = document.getElementById('orderTotal');
+      const orderSubmit = document.getElementById('orderSubmit');
+      const toast = document.getElementById('toast');
 
-window.onload = () => {
-  cart = JSON.parse(localStorage.getItem('cart')) || [];
-  displayOrder();
-};
+      function renderOrderItems() {
+        orderContainer.innerHTML = '';
+        let total = 0;
 
-function displayOrder() {
-  const orderContainer = document.getElementById('orderContainer');
-  orderContainer.innerHTML = '';
-  let total = 0;
-  cart.forEach(item => {
-    const orderItem = document.createElement('div');
-    orderItem.className = 'order-item';
+        orderItems.forEach((item, index) => {
+          const itemTotal = item.price * item.quantity;
+          total += itemTotal;
 
-    const itemName = document.createElement('div');
-    itemName.textContent = item.name;
-    orderItem.appendChild(itemName);
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'order-item';
 
-    const quantityControls = document.createElement('div');
-    quantityControls.className = 'quantity-controls';
+          itemDiv.innerHTML = `
+            <div>${item.name}</div>
+            <div>${item.price.toFixed(2)} USD</div>
+            <div class="quantity-controls">
+              <button onclick="updateQuantity(${index}, -1)">-</button>
+              <div>${item.quantity}</div>
+              <button onclick="updateQuantity(${index}, 1)">+</button>
+            </div>
+            <div>${itemTotal.toFixed(2)} USD</div>
+          `;
 
-    const decreaseButton = document.createElement('button');
-    decreaseButton.textContent = '-';
-    decreaseButton.onclick = () => updateQuantity(item.id, -1);
-    quantityControls.appendChild(decreaseButton);
+          orderContainer.appendChild(itemDiv);
+        });
 
-    const itemQuantity = document.createElement('div');
-    itemQuantity.textContent = item.quantity;
-    quantityControls.appendChild(itemQuantity);
+        orderTotal.innerText = `Total: $${total.toFixed(2)}`;
+      }
 
-    const increaseButton = document.createElement('button');
-    increaseButton.textContent = '+';
-    increaseButton.onclick = () => updateQuantity(item.id, 1);
-    quantityControls.appendChild(increaseButton);
+      function updateQuantity(index, change) {
+        if (orderItems[index].quantity + change > 0) {
+          orderItems[index].quantity += change;
+          localStorage.setItem('orderItems', JSON.stringify(orderItems));
+          renderOrderItems();
+        }
+      }
 
-    orderItem.appendChild(quantityControls);
+      window.updateQuantity = updateQuantity;
 
-    const itemPrice = document.createElement('div');
-    itemPrice.textContent = `₴${item.price * item.quantity}.00`;
-    orderItem.appendChild(itemPrice);
+      orderSubmit.addEventListener('click', () => {
+        const phone = document.getElementById('phone').value;
+        const lastName = document.getElementById('lastName').value;
+        const firstName = document.getElementById('firstName').value;
+        const delivery = document.querySelector('input[name="delivery"]:checked').value;
+        const city = document.getElementById('city').value;
+        const payment = document.querySelector('input[name="payment"]:checked').value;
 
-    orderContainer.appendChild(orderItem);
+        const orderData = {
+          phone,
+          lastName,
+          firstName,
+          delivery,
+          city,
+          payment,
+          items: orderItems
+        };
 
-    total += item.price * item.quantity;
-  });
-  const orderTotal = document.createElement('div');
-  orderTotal.className = 'order-total';
-  orderTotal.textContent = `Всього: ₴${total}.00`;
-  orderContainer.appendChild(orderTotal);
+        console.log('Order data:', orderData);
 
-  const orderSubmitButton = document.createElement('button');
-  orderSubmitButton.className = 'order-submit';
-  orderSubmitButton.textContent = 'Підтвердити замовлення';
-  orderSubmitButton.onclick = submitOrder;
-  orderContainer.appendChild(orderSubmitButton);
-}
+        localStorage.setItem('orderItems', JSON.stringify([]));
+        showToast('Order placed successfully!');
+      });
 
-function updateQuantity(id, change) {
-  const item = cart.find(item => item.id === id);
-  if (item) {
-    item.quantity += change;
-    if (item.quantity < 1) {
-      item.quantity = 1;
-    }
-    displayOrder();
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }
-}
+      function showToast(message) {
+        const desc = document.getElementById('desc');
+        desc.textContent = message;
+        toast.className = 'show';
+        setTimeout(() => { toast.className = toast.className.replace('show', ''); }, 3000);
+      }
 
-async function submitOrder() {
-  const orderData = cart.map(item => ({
-    sporting_goodsId: item.id,
-    quantity: item.quantity,
-    status: 'pending',
-    orderDate: new Date()
-  }));
-
-  try {
-    const response = await fetch('http://localhost:3001/store/order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(orderData)
+      renderOrderItems();
     });
-
-    if (response.ok) {
-      showToast('Ваше замовлення підтверджено!');
-      localStorage.removeItem('cart');
-      setTimeout(() => {
-        window.location.href = 'product_list.html';
-      }, 2000);
-    } else {
-      showToast('Не вдалося підтвердити замовлення.');
-    }
-  } catch (error) {
-    console.error('Failed to submit order', error);
-    showToast('Не вдалося підтвердити замовлення.');
-  }
-}
-
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  const desc = document.getElementById("desc");
-  desc.textContent = message;
-  toast.className = "show";
-  setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-}
   </script>
 </body>
 </html>
