@@ -9,8 +9,10 @@
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
       margin: 0;
-      padding: 20px;
+      padding: 0;
       display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
     h1 {
       text-align: center;
@@ -23,6 +25,7 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
       margin-right: 20px;
+      margin-top: 20px;
     }
     .sidebar h2 {
       font-size: 1.5em;
@@ -46,6 +49,7 @@
       flex-wrap: wrap;
       justify-content: space-around;
       flex-grow: 1;
+      padding: 20px;
     }
     .card {
       background-color: #fff;
@@ -124,7 +128,7 @@
     .cart {
       position: fixed;
       right: 20px;
-      top: 20px;
+      top: 120px;
       width: 300px;
       background-color: #fff;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -163,33 +167,156 @@
       width: 100%;
       margin-top: 10px;
     }
+
+    /* Navbar styles */
+    .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-height: 85px;
+        }
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-logo img {
+            height: 100px;
+            margin-right: 10px;
+        }
+        .navbar-logo span {
+            font-size: 36px;
+            color: #8DC63F;
+        }
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar-menu li {
+            margin: 0 15px;
+        }
+        .navbar-menu a {
+            text-decoration: none;
+            color: #666;
+            font-size: 16px;
+        }
+        .navbar-menu a:hover {
+            color: #8DC63F;
+        }
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-login {
+            padding: 5px 15px;
+            background-color: #8DC63F;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            margin-right: 25px; 
+        }
+        .navbar-login:hover {
+            background-color: #76B033;
+        }
+        .navbar-cart {
+            position: relative;
+        }
+        .navbar-cart img {
+            height: 30px;
+            cursor: pointer;
+        }
+        .navbar-cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+
+    /* Footer styles */
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      position: relative;
+      width: 100%;
+      margin-top: auto;
+    }
+    footer div a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    footer div a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <div class="sidebar">
-    <h2>Сортувати товари</h2>
-    <label for="sortPrice">Сортувати за ціною</label>
-    <select id="sortPrice">
-      <option value="default">За замовчуванням</option>
-      <option value="lowToHigh">Від дешевих до дорогих</option>
-      <option value="highToLow">Від дорогих до дешевих</option>
-    </select>
-    <label for="filterCategory">Категорії</label>
-    <select id="filterCategory">
-      <option value="all">Всі категорії</option>
-    </select>
-  </div>
-  <div class="container" id="goodsContainer">
-    <!-- Cards will be appended here by JavaScript -->
-  </div>
-  <div class="cart" id="cart">
-    <h2>Кошик</h2>
-    <div id="cartItems">
-      <!-- Cart items will be appended here by JavaScript -->
+  <!-- Header section -->
+  <nav class="navbar">
+    <div class="navbar-logo">
+        <img src="image/LogoShop.png" alt="Shop logo">
+        <span>Sport Shop</span>
     </div>
-    <div class="cart-total" id="cartTotal">Всього: ₴0.00</div>
-    <button class="cart-checkout" onclick="goToOrderPage()">Перейти до замовлення</button>
+    <ul class="navbar-menu">
+        <li><a href="HomePage.html">Home</a></li>                  
+        <li><a href="product_list.html">Shop</a></li>
+    </ul>
+    <div class="navbar-actions">
+        <a href="http://localhost:3001/auth/google" class="navbar-login">Login</a>
+        <div class="navbar-cart">
+            <img src="image/cart.png" alt="Cart">
+            <div class="navbar-cart-count">0</div>
+        </div>
+    </div>
+  </nav>
+  
+  <div style="display: flex; flex-direction: row; margin-top: 20px;">
+    <div class="sidebar">
+      <h2>Сортувати товари</h2>
+      <label for="sortPrice">Сортувати за ціною</label>
+      <select id="sortPrice">
+        <option value="default">За замовчуванням</option>
+        <option value="lowToHigh">Від дешевих до дорогих</option>
+        <option value="highToLow">Від дорогих до дешевих</option>
+      </select>
+      <label for="filterCategory">Категорії</label>
+      <select id="filterCategory">
+        <option value="all">Всі категорії</option>
+      </select>
+    </div>
+    <div class="container" id="goodsContainer">
+      <!-- Cards will be appended here by JavaScript -->
+    </div>
   </div>
+
+  <div class="cart" id="cart" style="display: none;">
+    <h2>Кошик</h2>
+    <div id="cartItems"></div>
+    <div class="cart-total" id="cartTotal">Всього: ₴0.00</div>
+    <button class="cart-checkout" onclick="goToOrderPage()">Оформити замовлення</button>
+  </div>
+  
+  <!-- Footer section -->
+  <footer>
+    <div>        
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+    </div>
+  </footer>
 
   <script>
     let goods = [];
@@ -315,6 +442,12 @@
         total += item.price * item.quantity;
       });
       document.getElementById('cartTotal').textContent = `Всього: ₴${total}.00`;
+      updateCartBadge();
+    }
+
+    function updateCartBadge() {
+      const cartCount = cart.reduce((count, item) => count + item.quantity, 0);
+      document.querySelector('.navbar-cart-count').textContent = cartCount;
     }
 
     function removeFromCart(id) {
@@ -349,6 +482,15 @@
 
     document.getElementById('sortPrice').addEventListener('change', sortGoods);
     document.getElementById('filterCategory').addEventListener('change', filterGoods);
+
+    document.querySelector('.navbar-cart img').addEventListener('click', () => {
+      const cartElement = document.getElementById('cart');
+      if (cartElement.style.display === 'none') {
+        cartElement.style.display = 'block';
+      } else {
+        cartElement.style.display = 'none';
+      }
+    });
 
     // Fetch goods when the page loads
     window.onload = fetchGoods;
