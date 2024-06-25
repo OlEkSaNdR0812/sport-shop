@@ -1,0 +1,511 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/auth/google": {
+      "get": {
+        "operationId": "AppController_googleAuth",
+        "summary": "Google Authentication",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Redirect to Google for authentication"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "operationId": "AppController_googleAuthRedirect",
+        "summary": "Google Authentication Callback",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/": {
+      "get": {
+        "operationId": "AppController_getHome",
+        "summary": "Home Page",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Welcome to the Home Page"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/admin": {
+      "get": {
+        "operationId": "AppController_getAdminData",
+        "summary": "Get Admin Data",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "This is admin data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/sportinggoods/{id}/uploadImage": {
+      "post": {
+        "operationId": "SportingGoodsController_uploadImage",
+        "summary": "Upload image for a sporting good",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image uploaded successfully"
+          }
+        },
+        "tags": [
+          "sportinggoods"
+        ]
+      }
+    },
+    "/sportinggoods": {
+      "get": {
+        "operationId": "SportingGoodsController_findAll",
+        "summary": "Get all sporting goods",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of sporting goods",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SportingGoods"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sportinggoods"
+        ]
+      },
+      "post": {
+        "operationId": "SportingGoodsController_create",
+        "summary": "Create a new sporting good",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SportingGoods"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Sporting good created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SportingGoods"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sportinggoods"
+        ]
+      }
+    },
+    "/sportinggoods/{id}": {
+      "get": {
+        "operationId": "SportingGoodsController_findOne",
+        "summary": "Get a sporting good by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sporting good found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SportingGoods"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sportinggoods"
+        ]
+      },
+      "put": {
+        "operationId": "SportingGoodsController_update",
+        "summary": "Update a sporting good by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SportingGoods"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sporting good updated"
+          }
+        },
+        "tags": [
+          "sportinggoods"
+        ]
+      },
+      "delete": {
+        "operationId": "SportingGoodsController_remove",
+        "summary": "Delete a sporting good by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sporting good deleted"
+          }
+        },
+        "tags": [
+          "sportinggoods"
+        ]
+      }
+    },
+    "/store/inventory": {
+      "get": {
+        "operationId": "StoreController_findAll",
+        "summary": "Get all orders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "store"
+        ]
+      }
+    },
+    "/store/order/{id}": {
+      "get": {
+        "operationId": "StoreController_findOne",
+        "summary": "Get an order by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "store"
+        ]
+      },
+      "delete": {
+        "operationId": "StoreController_remove",
+        "summary": "Delete an order by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order deleted"
+          }
+        },
+        "tags": [
+          "store"
+        ]
+      }
+    },
+    "/store/order": {
+      "post": {
+        "operationId": "StoreController_create",
+        "summary": "Create a new order",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "store"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Sport Shop API",
+    "description": "The Sport Shop API documentation",
+    "version": "0.0.1",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "sportshop",
+      "description": ""
+    }
+  ],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "The unique identifier of the user"
+          },
+          "email": {
+            "type": "string",
+            "example": "user@example.com",
+            "description": "The email of the user"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John",
+            "description": "The first name of the user"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe",
+            "description": "The last name of the user"
+          },
+          "picture": {
+            "type": "string",
+            "example": "http://example.com/avatar.jpg",
+            "description": "The profile picture of the user"
+          },
+          "accessToken": {
+            "type": "string",
+            "example": "token123",
+            "description": "The access token of the user"
+          },
+          "role": {
+            "type": "string",
+            "example": "user",
+            "description": "The role of the user",
+            "default": "user"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "firstName",
+          "lastName",
+          "picture",
+          "accessToken",
+          "role"
+        ]
+      },
+      "SportingGoods": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "The unique identifier of the sporting goods item"
+          },
+          "name": {
+            "type": "string",
+            "example": "Basketball",
+            "description": "The name of the sporting goods item"
+          },
+          "price": {
+            "type": "number",
+            "example": 29.99,
+            "description": "The price of the sporting goods item"
+          },
+          "description": {
+            "type": "string",
+            "example": "A high-quality basketball",
+            "description": "The description of the sporting goods item"
+          },
+          "category": {
+            "type": "string",
+            "example": "ball",
+            "description": "The category of the sporting goods item"
+          },
+          "inStock": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the sporting goods item is in stock"
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "http://example.com/image.jpg",
+            "description": "The image URL of the sporting goods item",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "price",
+          "description",
+          "category",
+          "inStock",
+          "imageUrl"
+        ]
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "The unique identifier of the order"
+          },
+          "sporting_goodsId": {
+            "type": "number",
+            "example": 1,
+            "description": "The unique identifier of the sporting goods item"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 2,
+            "description": "The quantity of the sporting goods item"
+          },
+          "status": {
+            "type": "string",
+            "example": "pending",
+            "description": "The status of the order"
+          },
+          "orderDate": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00Z",
+            "description": "The date the order was placed"
+          }
+        },
+        "required": [
+          "id",
+          "sporting_goodsId",
+          "quantity",
+          "status",
+          "orderDate"
+        ]
+      }
+    }
+  }
+}
