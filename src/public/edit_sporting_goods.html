@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Sporting Good</title>
+  <title>Edit Sporting Good</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -174,9 +174,9 @@
       <span>Sport Shop</span>
     </div>
     <ul class="navbar-menu">
-      <li><a href="HomePage.html">Головна</a></li>                  
-      <li><a href="product_list.html">Магазин</a></li>
-      <li><a href="edit_sporting_goods.html">Редагувати</a></li>
+        <li><a href="HomePage.html">Головна</a></li>                  
+        <li><a href="product_list.html">Магазин</a></li>
+        <li><a href="create_sporting_goods.html">Створити</a></li>
     </ul>
     <div class="navbar-actions">
       <a href="http://localhost:3001/auth/google" class="navbar-login">Admin</a>
@@ -187,9 +187,18 @@
     </div>
   </nav>
 
-  <!-- Form section -->
-  <h1>Create Sporting Good</h1>
-  <form id="sportingGoodForm" enctype="multipart/form-data">
+  <!-- Step 1: Form to input ID -->
+  <h1>Edit Sporting Good</h1>
+  <form id="idForm">
+    <div>
+      <label for="sportingGoodId">Enter Sporting Good ID:</label>
+      <input type="text" id="sportingGoodId" name="sportingGoodId" required>
+    </div>
+    <button type="submit">Fetch Sporting Good</button>
+  </form>
+
+  <!-- Step 2: Form to edit sporting good -->
+  <form id="sportingGoodForm" enctype="multipart/form-data" style="display:none;">
     <div>
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" required>
@@ -212,10 +221,10 @@
     </div>
     <div>
       <label for="file">Image:</label>
-      <input type="file" id="file" name="file" required>
+      <input type="file" id="file" name="file">
       <img id="imagePreview" src="" alt="Image Preview" style="display: none;">
     </div>
-    <button type="submit">Create Sporting Good</button>
+    <button type="submit">Update Sporting Good</button>
   </form>
 
   <!-- Footer section -->
@@ -227,46 +236,84 @@
   </footer>
 
   <script>
-    document.getElementById('sportingGoodForm').addEventListener('submit', async function(event) {
-      event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function() {
+      const idForm = document.getElementById('idForm');
+      const sportingGoodForm = document.getElementById('sportingGoodForm');
+      
+      idForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const sportingGoodId = document.getElementById('sportingGoodId').value;
+        
+        fetch(`http://localhost:3001/sportinggoods/${sportingGoodId}`)
+          .then(response => response.json())
+          .then(data => {
+            if (!data) {
+              alert('Sporting good not found');
+              return;
+            }
 
-      try {
-        const formData = new FormData();
-        formData.append('name', document.getElementById('name').value);
-        formData.append('price', document.getElementById('price').value);
-        formData.append('description', document.getElementById('description').value);
-        formData.append('category', document.getElementById('category').value);
-        formData.append('inStock', document.getElementById('inStock').checked);
-        formData.append('file', document.getElementById('file').files[0]);
+            document.getElementById('name').value = data.name;
+            document.getElementById('price').value = data.price;
+            document.getElementById('description').value = data.description;
+            document.getElementById('category').value = data.category;
+            document.getElementById('inStock').checked = data.inStock;
+            if (data.imageUrl) {
+              document.getElementById('imagePreview').src = data.imageUrl;
+              document.getElementById('imagePreview').style.display = 'block';
+            }
 
-        // Create new sporting goods item
-        const response = await fetch('http://localhost:3001/sportinggoods', {
-          method: 'POST',
-          body: JSON.stringify({
-            name: formData.get('name'),
-            price: formData.get('price'),
-            description: formData.get('description'),
-            category: formData.get('category'),
-            inStock: formData.get('inStock'),
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+            idForm.style.display = 'none';
+            sportingGoodForm.style.display = 'block';
+          })
+          .catch(error => {
+            console.error('Error fetching sporting good:', error);
+            alert('Error fetching sporting good');
+          });
+      });
 
-        const newSportingGood = await response.json();
+      sportingGoodForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const sportingGoodId = document.getElementById('sportingGoodId').value;
 
-        // Upload image for the created sporting goods item
-        await fetch(`http://localhost:3001/sportinggoods/${newSportingGood.id}/uploadImage`, {
-          method: 'POST',
-          body: formData,
-        });
+        try {
+          const formData = new FormData();
+          formData.append('name', document.getElementById('name').value);
+          formData.append('price', document.getElementById('price').value);
+          formData.append('description', document.getElementById('description').value);
+          formData.append('category', document.getElementById('category').value);
+          formData.append('inStock', document.getElementById('inStock').checked);
 
-        alert('Sporting good created successfully');
-      } catch (error) {
-        console.error('There was an error creating the sporting good!', error);
-        alert('Failed to create sporting good. Check console for details.');
-      }
+          // Update sporting goods item
+          await fetch(`http://localhost:3001/sportinggoods/${sportingGoodId}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              name: formData.get('name'),
+              price: formData.get('price'),
+              description: formData.get('description'),
+              category: formData.get('category'),
+              inStock: formData.get('inStock'),
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          // Upload image for the sporting goods item if a file was selected
+          if (document.getElementById('file').files.length > 0) {
+            formData.append('file', document.getElementById('file').files[0]);
+
+            await fetch(`http://localhost:3001/sportinggoods/${sportingGoodId}/uploadImage`, {
+              method: 'POST',
+              body: formData,
+            });
+          }
+
+          alert('Sporting good updated successfully');
+        } catch (error) {
+          console.error('There was an error updating the sporting good!', error);
+          alert('Failed to update sporting good. Check console for details.');
+        }
+      });
     });
   </script>
 </body>
