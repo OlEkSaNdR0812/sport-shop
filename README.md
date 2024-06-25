@@ -1,3 +1,5 @@
+**Sport Shop**
+The Sport Shop Web Application is a dynamic web application developed as a student project, showcasing the capabilities of modern web development technologies. Leveraging the powerful NestJS framework for its backend, the app ensures a fast and seamless user experience. The robust and scalable PostgreSQL database is utilized for efficient data management, allowing for smooth handling of user, product, and order data. The user interface is elegantly styled using Bootstrap, providing a visually appealing and highly customizable design.
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
@@ -25,6 +27,12 @@
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Learn More
+To learn more about NestJS, take a look at the following resources:
+
+NestJS Documentation - learn about NestJS features and API.
+Learn NestJS - a guide for getting started with NestJS.
+You can check out the NestJS GitHub repository - your feedback and contributions are welcome!
 
 ## Installation
 
@@ -44,30 +52,35 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+Open [http://localhost:3001](http://localhost:3001) with your browser to see the result.
+You can start editing the page by modifying `public/HomePage.js`. The page auto-updates as you edit the file.
 
-## Test
+## Using the app
 
-```bash
-# unit tests
-$ npm run test
+The application has **two options for use**:
 
-# e2e tests
-$ npm run test:e2e
+-Administrative page
 
-# test coverage
-$ npm run test:cov
-```
+-User-client
 
-## Support
+Home page
+![alt text](image-1.png)
+Shop page
+![alt text](image-2.png)
+Order page
+![alt text](image-3.png)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+To use the administrative page, you must have the "admin" status, which is **assigned in the config.ts file, where the admin's email address is specified** or you can manually change the user status in PostgreSQL.
+With the status **"admin"** the user can add sports goods and edit them:
+![alt text](image-4.png)
+![alt text](image-5.png)
 
-## Stay in touch
+## Swagger UI
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+To view the Swagger UI, an extension was installed **in Visual Studio Code - Swagger Previewer**.
 
-## License
+ A **swagger.json** file was also created, which describes all the components, object models used to manage data in various application **endpoints**.
 
-Nest is [MIT licensed](LICENSE).
+![alt text](image-6.png)
+![alt text](image-7.png)
+![alt text](image-8.png)
