@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: rgba(191, 242, 184, 0.323);
+      background-color: #f4f4f4;
       margin: 0;
       padding: 0;
       display: flex;
@@ -224,7 +224,6 @@
     .form-group div {
       margin-bottom: 5px;
     }
-
   </style>
 </head>
 <body>
@@ -249,7 +248,10 @@
 
   <h1>Ваше замовлення</h1>
   <div class="order-container" id="orderContainer">
-      </div>
+    <!-- Order items will be appended here by JavaScript -->
+  </div>
+  <div id="toast" class="toast"><div id="desc">Ваше замовлення підтверджено!</div></div>
+  
   <div class="form-section">
     <h2>Контактні дані</h2>
     <div class="form-group">
@@ -313,68 +315,117 @@
     
     </div>
   </div>
-  <div class="order-total" id="orderTotal">Total: $0.00</div>
-  <button class="order-submit" id="orderSubmit">Submit Order</button>
-
-  <div id="toast" class="toast">
-    <div id="desc">Order placed successfully!</div>
-  </div>
-
+  <!-- Footer section -->
   <footer>
-    <div>
-      <a href="#">Terms of Service</a>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Contact Us</a>
+    <div>        
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
     </div>
   </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const orderItems = JSON.parse(localStorage.getItem('orderItems')) || [];
-      const orderContainer = document.getElementById('orderContainer');
-      const orderTotal = document.getElementById('orderTotal');
-      const orderSubmit = document.getElementById('orderSubmit');
-      const toast = document.getElementById('toast');
+    let cart = [];
 
-      function renderOrderItems() {
-        orderContainer.innerHTML = '';
-        let total = 0;
+window.onload = () => {
+  cart = JSON.parse(localStorage.getItem('cart')) || [];
+  displayOrder();
+};
 
-        orderItems.forEach((item, index) => {
-          const itemTotal = item.price * item.quantity;
-          total += itemTotal;
+function displayOrder() {
+  const orderContainer = document.getElementById('orderContainer');
+  orderContainer.innerHTML = '';
+  let total = 0;
+  cart.forEach(item => {
+    const orderItem = document.createElement('div');
+    orderItem.className = 'order-item';
 
-          const itemDiv = document.createElement('div');
-          itemDiv.className = 'order-item';
+    const itemName = document.createElement('div');
+    itemName.textContent = item.name;
+    orderItem.appendChild(itemName);
 
-          itemDiv.innerHTML = `
-            <div>${item.name}</div>
-            <div>${item.price.toFixed(2)} USD</div>
-            <div class="quantity-controls">
-              <button onclick="updateQuantity(${index}, -1)">-</button>
-              <div>${item.quantity}</div>
-              <button onclick="updateQuantity(${index}, 1)">+</button>
-            </div>
-            <div>${itemTotal.toFixed(2)} USD</div>
-          `;
+    const quantityControls = document.createElement('div');
+    quantityControls.className = 'quantity-controls';
 
-          orderContainer.appendChild(itemDiv);
-        });
+    const decreaseButton = document.createElement('button');
+    decreaseButton.textContent = '-';
+    decreaseButton.onclick = () => updateQuantity(item.id, -1);
+    quantityControls.appendChild(decreaseButton);
 
-        orderTotal.innerText = `Total: $${total.toFixed(2)}`;
-      }
+    const itemQuantity = document.createElement('div');
+    itemQuantity.textContent = item.quantity;
+    quantityControls.appendChild(itemQuantity);
 
-      function updateQuantity(index, change) {
-        if (orderItems[index].quantity + change > 0) {
-          orderItems[index].quantity += change;
-          localStorage.setItem('orderItems', JSON.stringify(orderItems));
-          renderOrderItems();
-        }
-      }
+    const increaseButton = document.createElement('button');
+    increaseButton.textContent = '+';
+    increaseButton.onclick = () => updateQuantity(item.id, 1);
+    quantityControls.appendChild(increaseButton);
 
-      window.updateQuantity = updateQuantity;
+    orderItem.appendChild(quantityControls);
 
-      orderSubmit.addEventListener('click', () => {
+    const itemPrice = document.createElement('div');
+    itemPrice.textContent = `₴${item.price * item.quantity}.00`;
+    orderItem.appendChild(itemPrice);
+
+    orderContainer.appendChild(orderItem);
+
+    total += item.price * item.quantity;
+  });
+  const orderTotal = document.createElement('div');
+  orderTotal.className = 'order-total';
+  orderTotal.textContent = `Всього: ₴${total}.00`;
+  orderContainer.appendChild(orderTotal);
+
+  const orderSubmitButton = document.createElement('button');
+  orderSubmitButton.className = 'order-submit';
+  orderSubmitButton.textContent = 'Підтвердити замовлення';
+  orderSubmitButton.onclick = submitOrder;
+  orderContainer.appendChild(orderSubmitButton);
+}
+
+function updateQuantity(id, change) {
+  const item = cart.find(item => item.id === id);
+  if (item) {
+    item.quantity += change;
+    if (item.quantity < 1) {
+      item.quantity = 1;
+    }
+    displayOrder();
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+}
+
+async function submitOrder() {
+  const orderData = cart.map(item => ({
+    sporting_goodsId: item.id,
+    quantity: item.quantity,
+    status: 'pending',
+    orderDate: new Date()
+  }));
+
+  try {
+    const response = await fetch('http://localhost:3001/store/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(orderData)
+    });
+
+    if (response.ok) {
+      showToast('Ваше замовлення підтверджено!');
+      localStorage.removeItem('cart');
+      setTimeout(() => {
+        window.location.href = 'product_list.html';
+      }, 2000);
+    } else {
+      showToast('Не вдалося підтвердити замовлення.');
+    }
+  } catch (error) {
+    console.error('Failed to submit order', error);
+    showToast('Не вдалося підтвердити замовлення.');
+  }
+}
+orderSubmit.addEventListener('click', () => {
         const phone = document.getElementById('phone').value;
         const lastName = document.getElementById('lastName').value;
         const firstName = document.getElementById('firstName').value;
@@ -392,21 +443,15 @@
           items: orderItems
         };
 
-        console.log('Order data:', orderData);
+        console.log('Order data:', orderData)      });
 
-        localStorage.setItem('orderItems', JSON.stringify([]));
-        showToast('Order placed successfully!');
-      });
-
-      function showToast(message) {
-        const desc = document.getElementById('desc');
-        desc.textContent = message;
-        toast.className = 'show';
-        setTimeout(() => { toast.className = toast.className.replace('show', ''); }, 3000);
-      }
-
-      renderOrderItems();
-    });
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  const desc = document.getElementById("desc");
+  desc.textContent = message;
+  toast.className = "show";
+  setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+}
   </script>
 </body>
 </html>
