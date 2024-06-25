@@ -163,7 +163,9 @@
             background-size: cover;
             padding: 300px 0;
             overflow: hidden; 
+            
         }
+      
         .content {
             width: 80%;
             margin: 0 auto;
@@ -172,11 +174,18 @@
             gap: 20px;
         }
         .content .block {
-            background: white;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             flex: 1 1 30%;
+            background-color: #fff; /* Додаємо задній колір тут */
+            border-radius: 8px; /* Додаємо закруглені кути для естетики */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легке тінювання для глибини */
         }
+        .content .block h2 {
+        color: rgba(217, 255, 0, 0.978); 
+        margin: 0;
+    }
+
+        
         footer {
             background-color: #333;
             color: #fff;
@@ -290,8 +299,8 @@
             <span>Sport Shop</span>
         </div>
         <ul class="navbar-menu">
-            <li><a href="HomePage.html">Home</a></li>                  
-            <li><a href="product_list.html">Shop</a></li>
+            <li><a href="HomePage.html">Головна</a></li>                  
+            <li><a href="product_list.html">Магазин</a></li>
         </ul>
         <div class="navbar-actions">
             <a href="http://localhost:3001/auth/google" class="navbar-login">Login</a>
@@ -337,12 +346,12 @@
     <div class="background-section">
         <div class="content">
             <div class="block">
-                <h2>About Us</h2>
-                <p>We are the leading sport shop offering a wide range of products...</p>
+                <h2>Про наш магазин</h2>
+                <p>У нашому спортивному магазині ми пропонуємо широкий асортимент високоякісних спортивних товарів для всіх вікових груп та рівнів підготовки. Ми прагнемо допомогти нашим клієнтам досягти своїх спортивних цілей, надаючи їм найкращі продукти та обслуговування.</p>
             </div>
             <div class="block">
-                <h2>Our Mission</h2>
-                <p>Our mission is to provide the best quality sports equipment...</p>
+                <h2>Наша місія</h2>
+                <p>Наша місія полягає в тому, щоб надихати та підтримувати здоровий спосіб життя наших клієнтів, пропонуючи їм якісне спортивне обладнання та одяг. Ми віримо, що спорт є ключем до здоров'я та добробуту, і прагнемо зробити його доступним для всіх.</p>
             </div>
         </div>
     </div>
